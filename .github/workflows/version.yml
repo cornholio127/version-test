@@ -1,0 +1,32 @@
+name: Version
+
+on: [push]
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.versionstring.outputs.version }}
+    steps:
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.7
+      with:
+        versionSpec: '5.x'
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Create version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v0.9.7
+    - name: Assemble version string
+      id: versionstring
+      run: echo "::set-output name=test::v-${{ steps.gitversion.outputs.majorMinorPatch }}"
+
+  package:
+    runs-on: ubuntu-latest
+    needs: version
+    steps:
+    - name: Display version
+      run: |
+        echo Version: ${{ needs.version.outputs.version }}
