@@ -28,8 +28,15 @@ jobs:
       if: steps.gitversion.outputs.branchName != 'master' && steps.gitversion.outputs.branchName != 'main'
       run: echo "::set-output name=version::${{ steps.gitversion.outputs.majorMinorPatch }}-${{ steps.gitversion.outputs.escapedBranchName }}"
     - name: Output version string
-      id: versionstring
+      id: v3
       run: echo "::set-output name=version::${{ steps.v1.outputs.version }}${{ steps.v2.outputs.version }}"
+    - name: Output build number
+      id: buildnumber
+      if: steps.gitversion.outputs.buildMetaData != ''
+      run: echo "::set-output name=build::-${{ steps.gitversion.outputs.buildMetaData }}"
+    - name: Output final version string
+      id: versionstring
+      run: echo "::set-output name=version::${{ steps.v3.outputs.version }}${{ steps.buildnumber.outputs.build }}"
 
   package:
     runs-on: ubuntu-latest
