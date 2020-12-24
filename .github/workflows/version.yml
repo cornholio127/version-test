@@ -21,7 +21,7 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0.9.7
     - name: Assemble version string
       id: versionstring
-      run: echo "::set-output name=test::v-${{ steps.gitversion.outputs.majorMinorPatch }}"
+      run: echo "::set-output name=version::v-${{ steps.gitversion.outputs.majorMinorPatch }}"
 
   package:
     runs-on: ubuntu-latest
