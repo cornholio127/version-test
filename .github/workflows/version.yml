@@ -21,11 +21,11 @@ jobs:
       uses: gittools/actions/gitversion/execute@v0.9.7
     - name: Assemble version string on master
       id: v1
-      if: steps.gitversion.outputs.branchName == 'master'
+      if: steps.gitversion.outputs.branchName == 'master' || steps.gitversion.outputs.branchName == 'main'
       run: echo "::set-output name=version::${{ steps.gitversion.outputs.majorMinorPatch }}"
     - name: Assemble version string on branch
       id: v2
-      if: steps.gitversion.outputs.branchName != 'master'
+      if: steps.gitversion.outputs.branchName != 'master' && steps.gitversion.outputs.branchName != 'main'
       run: echo "::set-output name=version::${{ steps.gitversion.outputs.majorMinorPatch }}-${{ steps.gitversion.outputs.escapedBranchName }}"
     - name: Output version string
       id: versionstring
