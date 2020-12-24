@@ -19,9 +19,14 @@ jobs:
     - name: Create version
       id: gitversion
       uses: gittools/actions/gitversion/execute@v0.9.7
-    - name: Assemble version string
+    - name: Assemble version string on master
       id: versionstring
-      run: echo "::set-output name=version::v-${{ steps.gitversion.outputs.majorMinorPatch }}"
+      if: steps.gitversion.outputs.branchName == "master"
+      run: echo "::set-output name=version::${{ steps.gitversion.outputs.majorMinorPatch }}"
+    - name: Assemble version string on branch
+      id: versionstring
+      if: steps.gitversion.outputs.branchName != "master"
+      run: echo "::set-output name=version::${{ steps.gitversion.outputs.majorMinorPatch }}-${{ steps.gitversion.outputs.escapedBranchName }}"
 
   package:
     runs-on: ubuntu-latest
